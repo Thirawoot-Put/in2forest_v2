@@ -27,14 +27,21 @@ func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 		return response.Error("failed to create role", constants.StatusCode.BadRequest)
 	}
 
-	return response.Success("create success", constants.StatusCode.Created, id)
+	resData := map[string]uint{"id": *id}
+	return response.Success("create success", constants.StatusCode.Created, resData)
 }
 
 func (r *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
-	err := r.repo.SoftDelete(id)
+	affected, err := r.repo.HardDelete(id)
 	if err != nil {
 		return response.Error("failed to delete role", constants.StatusCode.ServerError)
 	}
 
-	return response.Success("delete success", constants.StatusCode.Ok, nil)
+	if affected < 1 {
+		return response.Error("invalid role", constants.StatusCode.NotFound)
+	}
+
+	resData := map[string]int64{"rowAffected": affected}
+
+	return response.Success("delete success", constants.StatusCode.Ok, resData)
 }

@@ -30,11 +30,20 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*u
 	return &role.ID, nil
 }
 
-func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) error {
+func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) (int64, error) {
 	result := r.db.Delete(&model.EmployeeRole{}, id)
 	if result.Error != nil {
-		return result.Error
+		return result.RowsAffected, result.Error
 	}
 
-	return nil
+	return result.RowsAffected, nil
+}
+
+func (r *EmployeeRoleRepositoryImpl) HardDelete(id uint) (int64, error) {
+	result := r.db.Unscoped().Delete(&model.EmployeeRole{}, id)
+	if result.Error != nil {
+		return result.RowsAffected, result.Error
+	}
+
+	return result.RowsAffected, nil
 }
