@@ -21,7 +21,7 @@ func (s *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 	var input dto.EmployeeRoleCreate
 	err := c.BodyParser(&input)
 	if err != nil {
-		return fiber.NewError(fiber.ErrBadRequest.Code, "failed to parse request body")
+		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
 	}
 
 	result := s.service.Create(input)
@@ -33,7 +33,7 @@ func (s *EmployeeRoleHandler) Delete(c *fiber.Ctx) error {
 	idStr := c.AllParams()["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return fiber.NewError(constants.StatusCode.BadRequest, "failed to convert id, make sure it's integer")
+		return fiber.NewError(constants.StatusCode.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
 	}
 
 	result := s.service.Delete(uint(id))

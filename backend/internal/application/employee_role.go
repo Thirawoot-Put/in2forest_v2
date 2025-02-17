@@ -1,7 +1,6 @@
 package application
 
 import (
-	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
@@ -36,7 +35,7 @@ func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 
 	id, err := s.repo.Create(&role)
 	if err != nil {
-		return response.Error("failed to create role", constants.StatusCode.BadRequest)
+		return response.Error("FAILED_TO_CREATE_ROLE", constants.StatusCode.ServerError)
 	}
 
 	resData := map[string]uint{"id": *id}
