@@ -29,3 +29,12 @@ func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 
 	return response.Success("create success", constants.StatusCode.Created, id)
 }
+
+func (r *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
+	err := r.repo.SoftDelete(id)
+	if err != nil {
+		return response.Error("failed to delete role", constants.StatusCode.ServerError)
+	}
+
+	return response.Success("delete success", constants.StatusCode.Ok, nil)
+}

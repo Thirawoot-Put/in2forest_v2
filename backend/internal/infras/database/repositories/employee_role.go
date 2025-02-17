@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"thirawoot/in2forest_shop_backend/internal/domain"
+	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 
 	"gorm.io/gorm"
@@ -27,4 +28,13 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*u
 	}
 
 	return &role.ID, nil
+}
+
+func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) error {
+	result := r.db.Delete(&model.EmployeeRole{}, id)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

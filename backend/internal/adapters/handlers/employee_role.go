@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"strconv"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 
@@ -23,6 +24,18 @@ func (s *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 	}
 
 	result := s.service.Create(input)
+
+	return c.Status(result.StatusCode).JSON(result)
+}
+
+func (s *EmployeeRoleHandler) Delete(c *fiber.Ctx) error {
+	idStr := c.AllParams()["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return fiber.NewError(fiber.ErrBadRequest.Code, "failed to convert id, make sure it's integer")
+	}
+
+	result := s.service.Delete(uint(id))
 
 	return c.Status(result.StatusCode).JSON(result)
 }

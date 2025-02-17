@@ -17,5 +17,6 @@ func EmployeeRoleRoutes(route fiber.Router, db *gorm.DB) {
 	employeeRoleRoute := route.Group("/employee-role")
 	{
 		employeeRoleRoute.Post("", handlers.PostEmployeeRole)
+		employeeRoleRoute.Delete("/:id", handlers.Delete)
 	}
 }
