@@ -5,6 +5,7 @@ import (
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
+	"thirawoot/in2forest_shop_backend/internal/utils/constants"
 	"thirawoot/in2forest_shop_backend/internal/utils/response"
 )
 
@@ -23,8 +24,8 @@ func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 
 	id, err := r.repo.Create(&role)
 	if err != nil {
-		return response.Error("failed to create role", 400)
+		return response.Error("failed to create role", constants.StatusCode.BadRequest)
 	}
 
-	return response.Success("create success", 201, id)
+	return response.Success("create success", constants.StatusCode.Ok, id)
 }
