@@ -39,7 +39,7 @@ func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 	}
 
 	resData := map[string]uint{"id": *id}
-	return response.Success("create success", constants.StatusCode.Created, resData)
+	return response.Success("SUCCESS", constants.StatusCode.Created, resData)
 }
 
 func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
@@ -54,5 +54,21 @@ func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
 
 	resData := map[string]int64{"rowAffected": affected}
 
-	return response.Success("delete success", constants.StatusCode.Ok, resData)
+	return response.Success("SUCCESSs", constants.StatusCode.Ok, resData)
+}
+
+func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) response.Response {
+	foundRole := s.repo.Find(id)
+	if foundRole == nil {
+		return response.Error("ROLE_NOT_FOUND", constants.StatusCode.NotFound)
+	}
+
+	affected, err := s.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
+	if err != nil {
+		return response.Error("FAILED_TO_UPDATE_ROLE", constants.StatusCode.ServerError)
+	}
+
+	resData := map[string]interface{}{"id": foundRole.ID, "rowAffected": affected}
+
+	return response.Success("SUCESS", constants.StatusCode.Ok, resData)
 }

@@ -17,25 +17,42 @@ func NewEmployeeRoleHandler(service portin.EmployeeRoleService) EmployeeRoleHand
 	return EmployeeRoleHandler{service: service}
 }
 
-func (s *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
+func (h *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 	var input dto.EmployeeRoleCreate
 	err := c.BodyParser(&input)
 	if err != nil {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
 	}
 
-	result := s.service.Create(input)
+	result := h.service.Create(input)
 
 	return c.Status(result.StatusCode).JSON(result)
 }
 
-func (s *EmployeeRoleHandler) Delete(c *fiber.Ctx) error {
+func (h *EmployeeRoleHandler) DeleteEmployeeRole(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.AllParams()["id"])
 	if err != nil {
 		return fiber.NewError(constants.StatusCode.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
 	}
 
-	result := s.service.Delete(uint(id))
+	result := h.service.Delete(uint(id))
+
+	return c.Status(result.StatusCode).JSON(result)
+}
+
+func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.AllParams()["id"])
+	if err != nil {
+		return fiber.NewError(constants.StatusCode.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
+	}
+
+	var input dto.EmployeeRoleCreate
+	err = c.BodyParser(&input)
+	if err != nil {
+		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
+	}
+
+	result := h.service.Update(uint(id), input)
 
 	return c.Status(result.StatusCode).JSON(result)
 }

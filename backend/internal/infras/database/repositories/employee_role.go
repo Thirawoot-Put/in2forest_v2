@@ -33,8 +33,19 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*u
 
 func (r *EmployeeRoleRepositoryImpl) FindByRole(role string) *domain.EmployeeRole {
 	foundRole := domain.EmployeeRole{}
+	result := r.db.First(&foundRole, domain.EmployeeRole{Role: role})
 
-	result := r.db.First(&foundRole, model.EmployeeRole{Role: role})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+
+	return &foundRole
+}
+
+func (r *EmployeeRoleRepositoryImpl) Find(id uint) *domain.EmployeeRole {
+	foundRole := domain.EmployeeRole{}
+	result := r.db.First(&foundRole, domain.EmployeeRole{ID: id})
+
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -43,7 +54,7 @@ func (r *EmployeeRoleRepositoryImpl) FindByRole(role string) *domain.EmployeeRol
 }
 
 func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) (int64, error) {
-	result := r.db.Delete(&model.EmployeeRole{}, id)
+	result := r.db.Delete(&domain.EmployeeRole{}, id)
 	if result.Error != nil {
 		return result.RowsAffected, result.Error
 	}
@@ -52,7 +63,16 @@ func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) (int64, error) {
 }
 
 func (r *EmployeeRoleRepositoryImpl) HardDelete(id uint) (int64, error) {
-	result := r.db.Unscoped().Delete(&model.EmployeeRole{}, id)
+	result := r.db.Unscoped().Delete(&domain.EmployeeRole{}, id)
+	if result.Error != nil {
+		return result.RowsAffected, result.Error
+	}
+
+	return result.RowsAffected, nil
+}
+
+func (r *EmployeeRoleRepositoryImpl) Update(id uint, data *domain.EmployeeRoleCreate) (int64, error) {
+	result := r.db.Save(&domain.EmployeeRole{ID: id, Role: data.Role})
 	if result.Error != nil {
 		return result.RowsAffected, result.Error
 	}

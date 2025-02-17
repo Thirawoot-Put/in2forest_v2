@@ -8,4 +8,5 @@ import (
 type EmployeeRoleService interface {
 	Create(data dto.EmployeeRoleCreate) response.Response
 	Delete(id uint) response.Response
+	Update(id uint, data dto.EmployeeRoleCreate) response.Response
 }
