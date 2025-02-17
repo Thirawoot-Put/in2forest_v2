@@ -10,3 +10,7 @@ type EmployeeRole struct {
 
 	Role string
 }
+
+type EmployeeRoleCreate struct {
+	Role string
+}
