@@ -1,1 +1,1 @@
-GET http://localhost:9090/api/v2/health
+GET http://{{base_url}}/{{prefix}}/{{version}}/health

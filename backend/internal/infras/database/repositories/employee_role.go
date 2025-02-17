@@ -20,7 +20,7 @@ func NewEmployeeRoleRepository(db *gorm.DB) portout.EmployeeRoleRepository {
 func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*uint, error) {
 	role := domain.EmployeeRole{Role: data.Role}
 
-	result := r.db.Create(role)
+	result := r.db.Create(&role)
 
 	if result.Error != nil {
 		return nil, result.Error

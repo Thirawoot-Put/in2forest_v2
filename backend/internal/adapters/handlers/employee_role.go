@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 
 	"github.com/gofiber/fiber/v2"
@@ -16,9 +16,13 @@ func NewEmployeeRoleHandler(service portin.EmployeeRoleService) EmployeeRoleHand
 }
 
 func (s *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
-	fmt.Printf("req body --> %v", c.Body())
-	fmt.Printf("req body in request --> %v", c.Request().Body())
-	c.Response().BodyWriter().Write([]byte("Hello, World!"))
-	// => "Hello, World!"
-	return nil
+	var input dto.EmployeeRoleCreate
+	err := c.BodyParser(&input)
+	if err != nil {
+		return fiber.NewError(fiber.ErrBadRequest.Code, "failed to parse request body")
+	}
+
+	result := s.service.Create(input)
+
+	return c.Status(result.StatusCode).JSON(result)
 }

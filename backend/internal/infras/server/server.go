@@ -2,12 +2,15 @@ package server
 
 import (
 	"fmt"
+	fiberlog "github.com/gofiber/fiber/v2/middleware/logger"
 	"thirawoot/in2forest_shop_backend/internal/adapters/handlers"
 	"thirawoot/in2forest_shop_backend/internal/config"
 	"thirawoot/in2forest_shop_backend/internal/infras/database"
+	"thirawoot/in2forest_shop_backend/internal/infras/server/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -22,24 +25,26 @@ func AppServer() *Server {
 	return &Server{app: app}
 }
 
-func (s *Server) routes(prefix string, version string) {
+func (s *Server) routes(prefix string, version string, db *gorm.DB) {
 	url := fmt.Sprintf("/%s/%s", prefix, version)
+	s.app.Use(fiberlog.New())
+
 	mainGroup := s.app.Group(url)
 
 	mainGroup.Get("/health", handlers.HealthCheck)
 
 	// place other route
+	routes.EmployeeRoleRoutes(mainGroup, db)
 }
 
 func (s *Server) Start() {
 	env := config.LoadEnv()
 
-	// connect db
-	database.Connect(env)
+	db := database.Connect(env)
 
 	addr := fmt.Sprintf(":%s", env.Port)
 
-	s.routes(env.Prefix, env.Version)
+	s.routes(env.Prefix, env.Version, db)
 
 	err := s.app.Listen(addr)
 	if err != nil {

@@ -27,5 +27,5 @@ func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 		return response.Error("failed to create role", constants.StatusCode.BadRequest)
 	}
 
-	return response.Success("create success", constants.StatusCode.Ok, id)
+	return response.Success("create success", constants.StatusCode.Created, id)
 }
