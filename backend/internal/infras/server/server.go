@@ -27,7 +27,6 @@ func AppServer() *Server {
 
 func (s *Server) routes(prefix string, version string, db *gorm.DB) {
 	url := fmt.Sprintf("/%s/%s", prefix, version)
-	s.app.Use(fiberlog.New())
 
 	mainGroup := s.app.Group(url)
 
@@ -38,6 +37,8 @@ func (s *Server) routes(prefix string, version string, db *gorm.DB) {
 }
 
 func (s *Server) Start() {
+	s.app.Use(fiberlog.New())
+
 	env := config.LoadEnv()
 
 	db := database.Connect(env)
