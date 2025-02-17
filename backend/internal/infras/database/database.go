@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"thirawoot/in2forest_shop_backend/internal/config"
+	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -30,7 +31,7 @@ func Connect(env *config.ConfigEnv) *gorm.DB {
 }
 
 func migrate(db *gorm.DB) {
-	err := db.AutoMigrate()
+	err := db.AutoMigrate(&model.EmployeeRole{}, &model.Employee{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
