@@ -30,8 +30,7 @@ func (s *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 }
 
 func (s *EmployeeRoleHandler) Delete(c *fiber.Ctx) error {
-	idStr := c.AllParams()["id"]
-	id, err := strconv.Atoi(idStr)
+	id, err := strconv.Atoi(c.AllParams()["id"])
 	if err != nil {
 		return fiber.NewError(constants.StatusCode.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
 	}

@@ -43,7 +43,7 @@ func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 }
 
 func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
-	affected, err := s.repo.HardDelete(id)
+	affected, err := s.repo.SoftDelete(id)
 	if err != nil {
 		return response.Error("FAILED_TO_DELETE_ROLE", constants.StatusCode.ServerError)
 	}
