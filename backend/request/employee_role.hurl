@@ -5,4 +5,4 @@ POST http://{{base_url}}/{{prefix}}/{{version}}/employee-role
 }
 
 
-DELETE http://{{base_url}}/{{prefix}}/{{version}}/employee-role/5
+DELETE http://{{base_url}}/{{prefix}}/{{version}}/employee-role/hi
