@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
@@ -19,10 +20,21 @@ func NewEmployeeRoleService(repository portout.EmployeeRoleRepository) portin.Em
 	}
 }
 
-func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.Response {
+func (s *EmployeeRoleServiceImpl) findByRole(data dto.EmployeeRole) *domain.EmployeeRole {
+	role := s.repo.FindByRole(data.Role)
+
+	return role
+}
+
+func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.Response {
 	role := domain.EmployeeRoleCreate{Role: data.Role}
 
-	id, err := r.repo.Create(&role)
+	foundRole := s.findByRole(dto.EmployeeRole{Role: role.Role})
+	if foundRole != nil {
+		return response.Error("THIS_ROLE_ALREADY_EXIST", constants.StatusCode.Conflict)
+	}
+
+	id, err := s.repo.Create(&role)
 	if err != nil {
 		return response.Error("failed to create role", constants.StatusCode.BadRequest)
 	}
@@ -31,14 +43,14 @@ func (r *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.R
 	return response.Success("create success", constants.StatusCode.Created, resData)
 }
 
-func (r *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
-	affected, err := r.repo.HardDelete(id)
+func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
+	affected, err := s.repo.HardDelete(id)
 	if err != nil {
-		return response.Error("failed to delete role", constants.StatusCode.ServerError)
+		return response.Error("FAILED_TO_DELETE_ROLE", constants.StatusCode.ServerError)
 	}
 
 	if affected < 1 {
-		return response.Error("invalid role", constants.StatusCode.NotFound)
+		return response.Error("INVALID_ROLE", constants.StatusCode.NotFound)
 	}
 
 	resData := map[string]int64{"rowAffected": affected}

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
@@ -28,6 +29,17 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*u
 	}
 
 	return &role.ID, nil
+}
+
+func (r *EmployeeRoleRepositoryImpl) FindByRole(role string) *domain.EmployeeRole {
+	foundRole := domain.EmployeeRole{}
+
+	result := r.db.First(&foundRole, model.EmployeeRole{Role: role})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+
+	return &foundRole
 }
 
 func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) (int64, error) {
