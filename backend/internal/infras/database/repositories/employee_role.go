@@ -17,7 +17,7 @@ func NewEmployeeRoleRepository(db *gorm.DB) portout.EmployeeRole {
 	}
 }
 
-func (r *EmployeeRoleRepositoryImpl) Save(data domain.EmployeeRoleCreate) (*uint, error) {
+func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*uint, error) {
 	role := domain.EmployeeRole{Role: data.Role}
 
 	result := r.db.Create(role)
