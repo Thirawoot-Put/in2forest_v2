@@ -1,17 +1,30 @@
 package application
 
-import portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
+import (
+	"thirawoot/in2forest_shop_backend/internal/dto"
+	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
+)
 
 type AuthAppImpl struct {
-	empApp portin.EmployeeApp
+	empApp     portin.EmployeeApp
+	empRoleApp portin.EmployeeRoleApp
 }
 
-func NewAuthApp(empApp portin.EmployeeApp) portin.AuthApp {
+func NewAuthApp(
+	empApp portin.EmployeeApp,
+	empRoleApp portin.EmployeeRoleApp,
+) portin.AuthApp {
 	return &AuthAppImpl{
-		empApp: empApp,
+		empApp:     empApp,
+		empRoleApp: empRoleApp,
 	}
 }
 
-func (a *AuthAppImpl) RegisterAdmin() {
+func (a *AuthAppImpl) RegisterAdmin(data dto.Employee) (string, error) {
+	role, err := a.empRoleApp.FindByRole("ADMIN")
+	if err != nil {
+		return "", err
+	}
 
+	return "token", nil
 }
