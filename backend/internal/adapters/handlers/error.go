@@ -8,14 +8,14 @@ import (
 )
 
 func HandleAppErr(e error, c *fiber.Ctx) error {
-	log.Printf("Error occurred in %s %s: %v \n", c.Method(), c.Path(), e)
-
 	if appErr, ok := e.(*application.AppErr); ok {
+		log.Printf("Error in %s %s: %s \n", c.Method(), c.Path(), appErr.Error())
 		return c.Status(appErr.Code).JSON(fiber.Map{
 			"message": appErr.Message,
 		})
 	}
 
+	log.Printf("Error in %s %s: %v \n", c.Method(), c.Path(), e)
 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 		"message": "Unexpected error",
 	})
