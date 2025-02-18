@@ -26,36 +26,35 @@ func (s *EmployeeRoleServiceImpl) findByRole(data dto.EmployeeRole) *domain.Empl
 	return role
 }
 
-func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.Response {
+func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error) {
 	role := domain.EmployeeRole{Role: data.Role}
 
 	foundRole := s.findByRole(dto.EmployeeRole{Role: role.Role})
 	if foundRole != nil {
-		return response.Error("THIS_ROLE_ALREADY_EXIST", constants.StatusCode.Conflict)
+		return nil, ErrAlreadyUse
 	}
 
 	newRole, err := s.repo.Create(&role)
 	if err != nil {
-		return response.Error("FAILED_TO_CREATE_ROLE", constants.StatusCode.ServerError)
+		return nil, NewAppErr("FAILED_TO_CREATE", constants.Code.ServerError, err)
 	}
 
-	resData := dto.EmployeeRole{ID: newRole.ID, Role: newRole.Role}
-	return response.Success("SUCCESS", constants.StatusCode.Created, resData)
+	return &dto.EmployeeRole{ID: newRole.ID, Role: newRole.Role}, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
+func (s *EmployeeRoleServiceImpl) Delete(id uint) (map[string]int64, error) {
 	affected, err := s.repo.SoftDelete(id)
+	mapRowAffected := map[string]int64{"rowAffected": affected}
+
 	if err != nil {
-		return response.Error("FAILED_TO_DELETE_ROLE", constants.StatusCode.ServerError)
+		return mapRowAffected, NewAppErr("FAILD_TO_DELETE", constants.Code.ServerError, err)
 	}
 
 	if affected < 1 {
-		return response.Error("INVALID_ROLE", constants.StatusCode.NotFound)
+		return mapRowAffected, ErrInvalidInternalData
 	}
 
-	resData := map[string]int64{"rowAffected": affected}
-
-	return response.Success("SUCCESSs", constants.StatusCode.Ok, resData)
+	return mapRowAffected, nil
 }
 
 func (s *EmployeeRoleServiceImpl) find(id uint) (*dto.EmployeeRole, error) {

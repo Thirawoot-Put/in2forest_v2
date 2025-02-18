@@ -6,8 +6,8 @@ import (
 )
 
 type EmployeeRoleService interface {
-	Create(data dto.EmployeeRoleCreate) response.Response
-	Delete(id uint) response.Response
+	Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error)
+	Delete(id uint) (map[string]int64, error)
 	Update(id uint, data dto.EmployeeRoleCreate) response.Response
 	Find(id uint) response.Response
 }

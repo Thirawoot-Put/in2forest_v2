@@ -12,4 +12,4 @@ PUT http://{{base_url}}/{{prefix}}/{{version}}/employee-role/99
   "Role": "STAFF"
 }
 
-GET http://{{base_url}}/{{prefix}}/{{version}}/employee-role/hi
+GET http://{{base_url}}/{{prefix}}/{{version}}/employee-role/99

@@ -13,7 +13,7 @@ type ApiStatus struct {
 	ServerError  int
 }
 
-var StatusCode = ApiStatus{
+var Code = ApiStatus{
 	Ok:           fiber.StatusOK,
 	Created:      fiber.StatusCreated,
 	BadRequest:   fiber.StatusBadRequest,
