@@ -14,10 +14,11 @@ func EmployeeRoleRoutes(route fiber.Router, db *gorm.DB) {
 	service := application.NewEmployeeRoleService(repository)
 	handlers := handlers.NewEmployeeRoleHandler(service)
 
-	employeeRoleRoute := route.Group("/employee-role")
+	empyRoleRoute := route.Group("/employee-role")
 	{
-		employeeRoleRoute.Post("", handlers.PostEmployeeRole)
-		employeeRoleRoute.Delete("/:id", handlers.DeleteEmployeeRole)
-		employeeRoleRoute.Put("/:id", handlers.PutEmployeeRole)
+		empyRoleRoute.Post("", handlers.PostEmployeeRole)
+		empyRoleRoute.Delete("/:id", handlers.DeleteEmployeeRole)
+		empyRoleRoute.Put("/:id", handlers.PutEmployeeRole)
+		empyRoleRoute.Get("/:id", handlers.GetEmployeeRole)
 	}
 }

@@ -18,6 +18,5 @@ func Error(message string, statusCode int) Response {
 	return Response{
 		Message:    message,
 		StatusCode: statusCode,
-		Data:       nil,
 	}
 }

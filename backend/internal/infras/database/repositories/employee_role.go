@@ -3,7 +3,6 @@ package repositories
 import (
 	"errors"
 	"thirawoot/in2forest_shop_backend/internal/domain"
-	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 
 	"gorm.io/gorm"
@@ -19,7 +18,7 @@ func NewEmployeeRoleRepository(db *gorm.DB) portout.EmployeeRoleRepository {
 	}
 }
 
-func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*uint, error) {
+func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRole) (*domain.EmployeeRole, error) {
 	role := domain.EmployeeRole{Role: data.Role}
 
 	result := r.db.Create(&role)
@@ -28,7 +27,7 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRoleCreate) (*u
 		return nil, result.Error
 	}
 
-	return &role.ID, nil
+	return &role, nil
 }
 
 func (r *EmployeeRoleRepositoryImpl) FindByRole(role string) *domain.EmployeeRole {

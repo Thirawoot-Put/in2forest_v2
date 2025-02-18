@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
@@ -26,19 +27,19 @@ func (s *EmployeeRoleServiceImpl) findByRole(data dto.EmployeeRole) *domain.Empl
 }
 
 func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) response.Response {
-	role := domain.EmployeeRoleCreate{Role: data.Role}
+	role := domain.EmployeeRole{Role: data.Role}
 
 	foundRole := s.findByRole(dto.EmployeeRole{Role: role.Role})
 	if foundRole != nil {
 		return response.Error("THIS_ROLE_ALREADY_EXIST", constants.StatusCode.Conflict)
 	}
 
-	id, err := s.repo.Create(&role)
+	newRole, err := s.repo.Create(&role)
 	if err != nil {
 		return response.Error("FAILED_TO_CREATE_ROLE", constants.StatusCode.ServerError)
 	}
 
-	resData := map[string]uint{"id": *id}
+	resData := dto.EmployeeRole{ID: newRole.ID, Role: newRole.Role}
 	return response.Success("SUCCESS", constants.StatusCode.Created, resData)
 }
 
@@ -57,18 +58,39 @@ func (s *EmployeeRoleServiceImpl) Delete(id uint) response.Response {
 	return response.Success("SUCCESSs", constants.StatusCode.Ok, resData)
 }
 
-func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) response.Response {
+func (s *EmployeeRoleServiceImpl) find(id uint) (*dto.EmployeeRole, error) {
 	foundRole := s.repo.Find(id)
+
 	if foundRole == nil {
-		return response.Error("ROLE_NOT_FOUND", constants.StatusCode.NotFound)
+		return nil, fmt.Errorf("ROLE_NOT_FOUND")
 	}
 
-	affected, err := s.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
+	return &dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}, nil
+}
+
+func (s *EmployeeRoleServiceImpl) Find(id uint) response.Response {
+	foundRole, err := s.find(id)
+	if err != nil {
+		return response.Error(err.Error(), constants.StatusCode.NotFound)
+	}
+
+	resData := dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}
+
+	return response.Success("SUCCESS", constants.StatusCode.Ok, resData)
+}
+
+func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) response.Response {
+	foundRole, err := s.find(id)
+	if err != nil {
+		return response.Error(err.Error(), constants.StatusCode.NotFound)
+	}
+
+	_, err = s.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
 	if err != nil {
 		return response.Error("FAILED_TO_UPDATE_ROLE", constants.StatusCode.ServerError)
 	}
 
-	resData := map[string]interface{}{"id": foundRole.ID, "rowAffected": affected}
+	resData := map[string]uint{"id": foundRole.ID}
 
-	return response.Success("SUCESS", constants.StatusCode.Ok, resData)
+	return response.Success("SUCCESS", constants.StatusCode.Ok, resData)
 }

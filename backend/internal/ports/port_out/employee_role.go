@@ -3,7 +3,7 @@ package portout
 import "thirawoot/in2forest_shop_backend/internal/domain"
 
 type EmployeeRoleRepository interface {
-	Create(data *domain.EmployeeRoleCreate) (*uint, error)
+	Create(data *domain.EmployeeRole) (*domain.EmployeeRole, error)
 	FindByRole(role string) *domain.EmployeeRole
 	Find(id uint) *domain.EmployeeRole
 	SoftDelete(id uint) (int64, error)
