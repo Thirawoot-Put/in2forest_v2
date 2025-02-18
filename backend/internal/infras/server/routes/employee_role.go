@@ -11,7 +11,7 @@ import (
 
 func EmployeeRoleRoutes(route fiber.Router, db *gorm.DB) {
 	repository := repositories.NewEmployeeRoleRepository(db)
-	service := application.NewEmployeeRoleService(repository)
+	service := application.NewEmployeeRoleApp(repository)
 	handlers := handlers.NewEmployeeRoleHandler(service)
 
 	empyRoleRoute := route.Group("/employee-role")

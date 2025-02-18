@@ -11,11 +11,11 @@ import (
 )
 
 type EmployeeRoleHandler struct {
-	service portin.EmployeeRoleApp
+	app portin.EmployeeRoleApp
 }
 
-func NewEmployeeRoleHandler(service portin.EmployeeRoleApp) EmployeeRoleHandler {
-	return EmployeeRoleHandler{service: service}
+func NewEmployeeRoleHandler(app portin.EmployeeRoleApp) EmployeeRoleHandler {
+	return EmployeeRoleHandler{app: app}
 }
 
 func atoiParam(param string) (int, error) {
@@ -34,7 +34,7 @@ func (h *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
 	}
 
-	result, err := h.service.Create(input)
+	result, err := h.app.Create(input)
 	if err != nil {
 		return HandleAppErr(err, c)
 	}
@@ -48,7 +48,7 @@ func (h *EmployeeRoleHandler) DeleteEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(constants.Code.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
 	}
 
-	result, err := h.service.Delete(uint(id))
+	result, err := h.app.Delete(uint(id))
 	if err != nil {
 		return HandleAppErr(err, c)
 	}
@@ -68,7 +68,7 @@ func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
 	}
 
-	result, err := h.service.Update(uint(id), input)
+	result, err := h.app.Update(uint(id), input)
 	if err != nil {
 		return HandleAppErr(err, c)
 	}
@@ -82,7 +82,7 @@ func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(constants.Code.BadRequest, err.Error())
 	}
 
-	result, err := h.service.Find(uint(id))
+	result, err := h.app.Find(uint(id))
 	if err != nil {
 		return HandleAppErr(err, c)
 	}

@@ -13,7 +13,7 @@ type EmployeeRoleAppImpl struct {
 	repo portout.EmployeeRoleRepository
 }
 
-func NewEmployeeRoleService(repository portout.EmployeeRoleRepository) portin.EmployeeRoleApp {
+func NewEmployeeRoleApp(repository portout.EmployeeRoleRepository) portin.EmployeeRoleApp {
 	return &EmployeeRoleAppImpl{
 		repo: repository,
 	}
