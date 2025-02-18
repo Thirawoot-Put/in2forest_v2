@@ -14,8 +14,8 @@ type EmployeeRoleHandler struct {
 	app portin.EmployeeRoleApp
 }
 
-func NewEmployeeRoleHandler(app portin.EmployeeRoleApp) EmployeeRoleHandler {
-	return EmployeeRoleHandler{app: app}
+func NewEmployeeRoleHandler(app portin.EmployeeRoleApp) *EmployeeRoleHandler {
+	return &EmployeeRoleHandler{app: app}
 }
 
 func atoiParam(param string) (int, error) {

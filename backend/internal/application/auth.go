@@ -3,28 +3,41 @@ package application
 import (
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
+	authjwt "thirawoot/in2forest_shop_backend/internal/utils/auth_jwt"
 )
 
-type AuthAppImpl struct {
+type AuthEmployeeAppImpl struct {
 	empApp     portin.EmployeeApp
 	empRoleApp portin.EmployeeRoleApp
 }
 
-func NewAuthApp(
+func NewAuthEmployeeApp(
 	empApp portin.EmployeeApp,
 	empRoleApp portin.EmployeeRoleApp,
-) portin.AuthApp {
-	return &AuthAppImpl{
+) portin.AuthEmployeeApp {
+	return &AuthEmployeeAppImpl{
 		empApp:     empApp,
 		empRoleApp: empRoleApp,
 	}
 }
 
-func (a *AuthAppImpl) RegisterAdmin(data dto.Employee) (string, error) {
+func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthResponse, error) {
 	role, err := a.empRoleApp.FindByRole("ADMIN")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return "token", nil
+	data.EmployeeRoleID = role.ID
+
+	emp, err := a.empApp.Create(data)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := authjwt.SignToken(emp.ID, role.Role)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.AuthResponse{AccessToken: token}, nil
 }

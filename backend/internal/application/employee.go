@@ -26,10 +26,11 @@ func (s *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
 	}
 
 	result, err := s.repo.Create(&domain.Employee{
-		Email:    data.Email,
-		Password: hash,
-		Name:     data.Name,
-		Mobile:   data.Mobile,
+		Email:          data.Email,
+		Password:       hash,
+		Name:           data.Name,
+		Mobile:         data.Mobile,
+		EmployeeRoleID: data.EmployeeRoleID,
 	})
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_CREATE_EMPLOYEE", constants.Code.ServerError, err)

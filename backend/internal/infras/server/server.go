@@ -33,7 +33,8 @@ func (s *Server) routes(prefix string, version string, db *gorm.DB) {
 	mainGroup.Get("/health", handlers.HealthCheck)
 
 	// place other route
-	routes.EmployeeRoleRoutes(mainGroup, db)
+	routes.EmployeeRoleRoutes(&mainGroup, db)
+	routes.AuthRoutes(&mainGroup, db)
 }
 
 func (s *Server) Start() {

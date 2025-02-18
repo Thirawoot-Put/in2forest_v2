@@ -9,12 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func EmployeeRoleRoutes(route fiber.Router, db *gorm.DB) {
+func EmployeeRoleRoutes(route *fiber.Router, db *gorm.DB) {
+	r := *route
+
 	repository := repositories.NewEmployeeRoleRepository(db)
 	service := application.NewEmployeeRoleApp(repository)
 	handlers := handlers.NewEmployeeRoleHandler(service)
 
-	empyRoleRoute := route.Group("/employee-role")
+	empyRoleRoute := r.Group("/employee-role")
 	{
 		empyRoleRoute.Post("", handlers.PostEmployeeRole)
 		empyRoleRoute.Get("/", handlers.GetEmployeeRoles)
