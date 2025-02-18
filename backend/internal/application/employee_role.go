@@ -1,14 +1,12 @@
 package application
 
 import (
-	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 	"thirawoot/in2forest_shop_backend/internal/utils/constants"
-
-	"github.com/gohugoio/hugo/markup/converter"
+	"thirawoot/in2forest_shop_backend/internal/utils/mapper"
 )
 
 type EmployeeRoleAppImpl struct {
@@ -85,17 +83,17 @@ func (a *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
 	return &resData, nil
 }
 
-func (a *EmployeeRoleAppImpl) FindAll() (*[]dto.EmployeeRole, error) {
+func (a *EmployeeRoleAppImpl) FindAll() ([]dto.EmployeeRole, error) {
 	foundRoles := a.repo.FindAll()
-	roles := make([]dto.EmployeeRole, len(*foundRoles))
+	roles := make([]dto.EmployeeRole, len(foundRoles))
 
-	if len(*foundRoles) == 0 {
+	if len(foundRoles) == 0 {
 		return nil, ErrNotFound
 	}
 
-	for i, role := range *foundRoles {
-		converter.NewManual()
+	for i, role := range foundRoles {
+		roles[i] = mapper.ToEmployeeRoleDto(role)
 	}
 
-	return &roles, nil
+	return roles, nil
 }
