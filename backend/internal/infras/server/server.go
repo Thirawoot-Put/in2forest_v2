@@ -3,10 +3,10 @@ package server
 import (
 	"fmt"
 	fiberlog "github.com/gofiber/fiber/v2/middleware/logger"
-	"thirawoot/in2forest_shop_backend/internal/adapters/handlers"
+	"thirawoot/in2forest_shop_backend/internal/adapters/http/handlers"
+	"thirawoot/in2forest_shop_backend/internal/adapters/http/routes"
 	"thirawoot/in2forest_shop_backend/internal/config"
 	"thirawoot/in2forest_shop_backend/internal/infras/database"
-	"thirawoot/in2forest_shop_backend/internal/infras/server/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"thirawoot/in2forest_shop_backend/internal/adapters/handlers"
+	"thirawoot/in2forest_shop_backend/internal/adapters/http/handlers"
 	"thirawoot/in2forest_shop_backend/internal/application"
 	"thirawoot/in2forest_shop_backend/internal/infras/database/repositories"
 
