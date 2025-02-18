@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
@@ -55,17 +56,6 @@ func (a *EmployeeRoleAppImpl) Delete(id uint) (map[string]int64, error) {
 	return mapRowAffected, nil
 }
 
-func (a *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
-	foundRole := a.repo.Find(id)
-	if foundRole == nil {
-		return nil, ErrNotFound
-	}
-
-	resData := dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}
-
-	return &resData, nil
-}
-
 func (a *EmployeeRoleAppImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error) {
 	_, err := a.Find(id)
 	mapRowAffected := map[string]int64{"rowAffected": 0}
@@ -80,4 +70,26 @@ func (a *EmployeeRoleAppImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[
 	}
 
 	return mapRowAffected, nil
+}
+
+func (a *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
+	foundRole := a.repo.Find(id)
+	if foundRole == nil {
+		return nil, ErrNotFound
+	}
+
+	resData := dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}
+
+	return &resData, nil
+}
+
+func (a *EmployeeRoleAppImpl) FindAll() *[]dto.EmployeeRole {
+	foundRoles := a.repo.FindAll()
+	roles := make([]dto.EmployeeRole, len(*foundRoles))
+
+	for _, i := range *foundRoles {
+		fmt.Println("i-->", i)
+	}
+
+	return &roles
 }

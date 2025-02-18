@@ -9,4 +9,5 @@ type EmployeeRoleApp interface {
 	Delete(id uint) (map[string]int64, error)
 	Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error)
 	Find(id uint) (*dto.EmployeeRole, error)
+	FindAll() *[]dto.EmployeeRole
 }
