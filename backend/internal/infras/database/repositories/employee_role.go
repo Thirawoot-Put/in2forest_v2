@@ -52,6 +52,13 @@ func (r *EmployeeRoleRepositoryImpl) Find(id uint) *domain.EmployeeRole {
 	return &foundRole
 }
 
+func (r *EmployeeRoleRepositoryImpl) FindAll() *[]domain.EmployeeRole {
+	var roles []domain.EmployeeRole
+	r.db.Find(&roles)
+
+	return &roles
+}
+
 func (r *EmployeeRoleRepositoryImpl) SoftDelete(id uint) (int64, error) {
 	result := r.db.Delete(&domain.EmployeeRole{}, id)
 	if result.Error != nil {
