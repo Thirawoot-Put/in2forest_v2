@@ -1,7 +1,7 @@
 POST http://{{base_url}}/{{prefix}}/{{version}}/employee-role
 
 {
-  "Role": "test5"
+  "Role": "STAFF"
 }
 
 DELETE http://{{base_url}}/{{prefix}}/{{version}}/employee-role/15

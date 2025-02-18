@@ -19,19 +19,24 @@ func NewEmployeeRoleApp(repository portout.EmployeeRoleRepository) portin.Employ
 	}
 }
 
-func (a *EmployeeRoleAppImpl) findByRole(data dto.EmployeeRole) *domain.EmployeeRole {
-	role := a.repo.FindByRole(data.Role)
+func (a *EmployeeRoleAppImpl) FindByRole(role string) (*dto.EmployeeRole, error) {
+	foundRole := a.repo.FindByRole(role)
+	if foundRole == nil {
+		return nil, ErrNotFound
+	}
 
-	return role
+	mapRole := mapper.ToEmployeeRoleDto(*foundRole)
+
+	return &mapRole, nil
 }
 
 func (a *EmployeeRoleAppImpl) Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error) {
-	role := domain.EmployeeRole{Role: data.Role}
-
-	foundRole := a.findByRole(dto.EmployeeRole{Role: role.Role})
+	foundRole, _ := a.FindByRole(data.Role)
 	if foundRole != nil {
 		return nil, ErrAlreadyUse
 	}
+
+	role := domain.EmployeeRole{Role: data.Role}
 
 	newRole, err := a.repo.Create(&role)
 	if err != nil {

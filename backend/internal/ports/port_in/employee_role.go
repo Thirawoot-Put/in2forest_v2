@@ -10,4 +10,5 @@ type EmployeeRoleApp interface {
 	Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error)
 	Find(id uint) (*dto.EmployeeRole, error)
 	FindAll() ([]dto.EmployeeRole, error)
+	FindByRole(data dto.EmployeeRole) *dto.EmployeeRole
 }
