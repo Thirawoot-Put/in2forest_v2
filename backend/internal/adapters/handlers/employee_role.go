@@ -11,10 +11,10 @@ import (
 )
 
 type EmployeeRoleHandler struct {
-	service portin.EmployeeRoleService
+	service portin.EmployeeRoleApp
 }
 
-func NewEmployeeRoleHandler(service portin.EmployeeRoleService) EmployeeRoleHandler {
+func NewEmployeeRoleHandler(service portin.EmployeeRoleApp) EmployeeRoleHandler {
 	return EmployeeRoleHandler{service: service}
 }
 

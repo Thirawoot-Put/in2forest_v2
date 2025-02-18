@@ -4,7 +4,7 @@ import (
 	"thirawoot/in2forest_shop_backend/internal/dto"
 )
 
-type EmployeeRoleService interface {
+type EmployeeRoleApp interface {
 	Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error)
 	Delete(id uint) (map[string]int64, error)
 	Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error)

@@ -9,23 +9,23 @@ import (
 	"thirawoot/in2forest_shop_backend/internal/utils/constants"
 )
 
-type EmployeeRoleServiceImpl struct {
+type EmployeeRoleAppImpl struct {
 	repo portout.EmployeeRoleRepository
 }
 
-func NewEmployeeRoleService(repository portout.EmployeeRoleRepository) portin.EmployeeRoleService {
-	return &EmployeeRoleServiceImpl{
+func NewEmployeeRoleService(repository portout.EmployeeRoleRepository) portin.EmployeeRoleApp {
+	return &EmployeeRoleAppImpl{
 		repo: repository,
 	}
 }
 
-func (s *EmployeeRoleServiceImpl) findByRole(data dto.EmployeeRole) *domain.EmployeeRole {
+func (s *EmployeeRoleAppImpl) findByRole(data dto.EmployeeRole) *domain.EmployeeRole {
 	role := s.repo.FindByRole(data.Role)
 
 	return role
 }
 
-func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error) {
+func (s *EmployeeRoleAppImpl) Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error) {
 	role := domain.EmployeeRole{Role: data.Role}
 
 	foundRole := s.findByRole(dto.EmployeeRole{Role: role.Role})
@@ -41,7 +41,7 @@ func (s *EmployeeRoleServiceImpl) Create(data dto.EmployeeRoleCreate) (*dto.Empl
 	return &dto.EmployeeRole{ID: newRole.ID, Role: newRole.Role}, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Delete(id uint) (map[string]int64, error) {
+func (s *EmployeeRoleAppImpl) Delete(id uint) (map[string]int64, error) {
 	affected, err := s.repo.SoftDelete(id)
 	mapRowAffected := map[string]int64{"rowAffected": affected}
 
@@ -56,7 +56,7 @@ func (s *EmployeeRoleServiceImpl) Delete(id uint) (map[string]int64, error) {
 	return mapRowAffected, nil
 }
 
-func (s *EmployeeRoleServiceImpl) find(id uint) (*dto.EmployeeRole, error) {
+func (s *EmployeeRoleAppImpl) find(id uint) (*dto.EmployeeRole, error) {
 	foundRole := s.repo.Find(id)
 
 	if foundRole == nil {
@@ -66,7 +66,7 @@ func (s *EmployeeRoleServiceImpl) find(id uint) (*dto.EmployeeRole, error) {
 	return &dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Find(id uint) (*dto.EmployeeRole, error) {
+func (s *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
 	foundRole := s.repo.Find(id)
 	if foundRole == nil {
 		return nil, ErrNotFound
@@ -77,7 +77,7 @@ func (s *EmployeeRoleServiceImpl) Find(id uint) (*dto.EmployeeRole, error) {
 	return &resData, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error) {
+func (s *EmployeeRoleAppImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error) {
 	_, err := s.Find(id)
 	mapRowAffected := map[string]int64{"rowAffected": 0}
 	if err != nil {
