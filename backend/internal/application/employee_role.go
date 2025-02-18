@@ -7,6 +7,8 @@ import (
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 	"thirawoot/in2forest_shop_backend/internal/utils/constants"
+
+	"github.com/gohugoio/hugo/markup/converter"
 )
 
 type EmployeeRoleAppImpl struct {
@@ -92,8 +94,7 @@ func (a *EmployeeRoleAppImpl) FindAll() (*[]dto.EmployeeRole, error) {
 	}
 
 	for i, role := range *foundRoles {
-		fmt.Println("i-->", i)
-		fmt.Println("t-->", role)
+		converter.NewManual()
 	}
 
 	return &roles, nil
