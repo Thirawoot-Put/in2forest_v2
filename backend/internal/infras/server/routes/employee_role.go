@@ -17,6 +17,7 @@ func EmployeeRoleRoutes(route fiber.Router, db *gorm.DB) {
 	empyRoleRoute := route.Group("/employee-role")
 	{
 		empyRoleRoute.Post("", handlers.PostEmployeeRole)
+		empyRoleRoute.Get("/", handlers.GetEmployeeRoles)
 		empyRoleRoute.Delete("/:id", handlers.DeleteEmployeeRole)
 		empyRoleRoute.Put("/:id", handlers.PutEmployeeRole)
 		empyRoleRoute.Get("/:id", handlers.GetEmployeeRole)

@@ -89,3 +89,12 @@ func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
 
 	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
 }
+
+func (h *EmployeeRoleHandler) GetEmployeeRoles(c *fiber.Ctx) error {
+	result, err := h.app.FindAll()
+	if err != nil {
+		return HandleAppErr(err, c)
+	}
+
+	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+}

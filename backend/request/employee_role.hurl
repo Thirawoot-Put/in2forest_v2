@@ -13,3 +13,5 @@ PUT http://{{base_url}}/{{prefix}}/{{version}}/employee-role/14
 }
 
 GET http://{{base_url}}/{{prefix}}/{{version}}/employee-role/15
+
+GET http://{{base_url}}/{{prefix}}/{{version}}/employee-role

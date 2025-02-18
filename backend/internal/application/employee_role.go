@@ -83,13 +83,18 @@ func (a *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
 	return &resData, nil
 }
 
-func (a *EmployeeRoleAppImpl) FindAll() *[]dto.EmployeeRole {
+func (a *EmployeeRoleAppImpl) FindAll() (*[]dto.EmployeeRole, error) {
 	foundRoles := a.repo.FindAll()
 	roles := make([]dto.EmployeeRole, len(*foundRoles))
 
-	for _, i := range *foundRoles {
-		fmt.Println("i-->", i)
+	if len(*foundRoles) == 0 {
+		return nil, ErrNotFound
 	}
 
-	return &roles
+	for i, role := range *foundRoles {
+		fmt.Println("i-->", i)
+		fmt.Println("t-->", role)
+	}
+
+	return &roles, nil
 }
