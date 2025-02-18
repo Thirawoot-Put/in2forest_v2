@@ -69,9 +69,12 @@ func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
 	}
 
-	result := h.service.Update(uint(id), input)
+	result, err := h.service.Update(uint(id), input)
+	if err != nil {
+		return HandleAppErr(err, c)
+	}
 
-	return c.Status(result.StatusCode).JSON(result)
+	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
 }
 
 func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
@@ -80,7 +83,10 @@ func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(constants.Code.BadRequest, err.Error())
 	}
 
-	result := h.service.Find(uint(id))
+	result, err := h.service.Find(uint(id))
+	if err != nil {
+		return HandleAppErr(err, c)
+	}
 
-	return c.Status(result.StatusCode).JSON(result)
+	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
 }

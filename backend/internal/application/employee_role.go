@@ -67,29 +67,29 @@ func (s *EmployeeRoleServiceImpl) find(id uint) (*dto.EmployeeRole, error) {
 	return &dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Find(id uint) response.Response {
-	foundRole, err := s.find(id)
-	if err != nil {
-		return response.Error(err.Error(), constants.StatusCode.NotFound)
+func (s *EmployeeRoleServiceImpl) Find(id uint) (*dto.EmployeeRole, error) {
+	foundRole := s.repo.Find(id)
+	if foundRole == nil {
+		return nil, ErrNotFound
 	}
 
 	resData := dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}
 
-	return response.Success("SUCCESS", constants.StatusCode.Ok, resData)
+	return &resData, nil
 }
 
-func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) response.Response {
-	foundRole, err := s.find(id)
+func (s *EmployeeRoleServiceImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error) {
+	_, err := s.Find(id)
+	mapRowAffected := map[string]int64{"rowAffected": 0}
 	if err != nil {
-		return response.Error(err.Error(), constants.StatusCode.NotFound)
+		return mapRowAffected, err
 	}
 
-	_, err = s.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
+	affected, err := s.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
+	mapRowAffected["rowAffected"] = affected
 	if err != nil {
-		return response.Error("FAILED_TO_UPDATE_ROLE", constants.StatusCode.ServerError)
+		return mapRowAffected, NewAppErr("FAILED_TO_UPDATE", constants.Code.ServerError, err)
 	}
 
-	resData := map[string]uint{"id": foundRole.ID}
-
-	return response.Success("SUCCESS", constants.StatusCode.Ok, resData)
+	return mapRowAffected, nil
 }

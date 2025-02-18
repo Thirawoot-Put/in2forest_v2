@@ -31,4 +31,5 @@ func NewAppErr(message string, code int, err error) *AppErr {
 var (
 	ErrAlreadyUse          = NewAppErr("ALREADY_IN_USE", constants.Code.BadRequest, nil)
 	ErrInvalidInternalData = NewAppErr("INVALID_INTERNAL_DATA", constants.Code.BadRequest, nil)
+	ErrNotFound            = NewAppErr("NOT_FOUND", constants.Code.NotFound, nil)
 )
