@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
