@@ -43,3 +43,7 @@ func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthRespons
 
 	return &dto.AuthResponse{AccessToken: token}, nil
 }
+
+func (a *AuthEmployeeAppImpl) LoginEmployee(data dto.AuthLogin) (*dto.AuthResponse, error) {
+	return nil, nil
+}

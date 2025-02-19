@@ -18,3 +18,15 @@ func ToEmployeeRoleDomain(dto dto.EmployeeRole) domain.EmployeeRole {
 		Role: dto.Role,
 	}
 }
+
+func ToEmployeeDto(domain domain.Employee) dto.Employee {
+	return dto.Employee{
+		ID:       domain.ID,
+		Email:    domain.Email,
+		Password: domain.Password,
+		Name:     domain.Name,
+		Mobile:   domain.Mobile,
+
+		EmployeeRoleID: domain.EmployeeRoleID,
+	}
+}

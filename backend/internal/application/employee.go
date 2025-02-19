@@ -43,3 +43,15 @@ func (s *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
 		Mobile: result.Mobile,
 	}, nil
 }
+
+func (s *EmployeeAppImpl) FindByEmail(email string) (*dto.Employee, error) {
+	emp, err := s.repo.FindByEmail(email)
+
+	if err != nil {
+		return nil, NewAppErr("FAILED_TO_FETCH", constants.Code.ServerError, err)
+	} else if emp == nil {
+		return nil, ErrNotFound
+	}
+
+	return nil, nil
+}
