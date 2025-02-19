@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type EmployeeRole struct {
 	gorm.Model
 
-	Role string `gorm:"unique;not null;size:100"`
+	Name string `gorm:"unique;not null;size:100"`
 
 	Employees []Employee
 }

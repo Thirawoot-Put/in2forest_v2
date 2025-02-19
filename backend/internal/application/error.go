@@ -32,4 +32,6 @@ var (
 	ErrAlreadyUse          = NewAppErr("ALREADY_IN_USE", constants.Code.BadRequest, nil)
 	ErrInvalidInternalData = NewAppErr("INVALID_INTERNAL_DATA", constants.Code.BadRequest, nil)
 	ErrNotFound            = NewAppErr("NOT_FOUND", constants.Code.NotFound, nil)
+	ErrUserNotFound        = NewAppErr("USER_NOT_FOUND", constants.Code.NotFound, nil)
+	ErrPasswordNotMatch    = NewAppErr("PASSWORD_NOT_MATCH", constants.Code.BadRequest, nil)
 )

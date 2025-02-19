@@ -1,7 +1,7 @@
 package dto
 
 type AuthResponse struct {
-	AccessToken string
+	AccessToken string `json:"accessToken"`
 }
 
 type AuthLogin struct {

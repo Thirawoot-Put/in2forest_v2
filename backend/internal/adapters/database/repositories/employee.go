@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
-	"thirawoot/in2forest_shop_backend/internal/dto"
+	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 	"thirawoot/in2forest_shop_backend/internal/utils/mapper"
 
@@ -22,14 +22,7 @@ func NewEmployeeRepository(db *gorm.DB) portout.EmployeeRepository {
 }
 
 func (r *EmployeeRepositoryImpl) Create(data *domain.Employee) (*domain.Employee, error) {
-	emp := domain.Employee{
-		Email:    data.Email,
-		Password: data.Password,
-		Name:     data.Name,
-		Mobile:   data.Mobile,
-
-		EmployeeRoleID: data.EmployeeRoleID,
-	}
+	emp := mapper.ToEmployeeModel(*data)
 
 	result := r.db.Create(&emp)
 
@@ -37,13 +30,15 @@ func (r *EmployeeRepositoryImpl) Create(data *domain.Employee) (*domain.Employee
 		return nil, result.Error
 	}
 
-	return &emp, nil
+	newEmp := mapper.ToEmployeeDomain(emp)
+
+	return &newEmp, nil
 }
 
 func (r *EmployeeRepositoryImpl) FindByEmail(email string) (*domain.Employee, error) {
-	emp := domain.Employee{}
+	emp := model.Employee{}
 
-	result := r.db.First(&emp, "email = ?", email)
+	result := r.db.Joins("JOIN employee_roles ON employee_roles.id = employees.employee_role_id").First(&emp, "email = ?", email)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -52,5 +47,9 @@ func (r *EmployeeRepositoryImpl) FindByEmail(email string) (*domain.Employee, er
 		return nil, result.Error
 	}
 
-	return &emp, nil
+	fmt.Println("---> emp: ", emp)
+	foundEmp := mapper.ToEmployeeDomain(emp)
+	fmt.Println("---> foundEmp: ", foundEmp)
+
+	return &foundEmp, nil
 }

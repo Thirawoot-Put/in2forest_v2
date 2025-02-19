@@ -9,5 +9,5 @@ type EmployeeRoleRepository interface {
 	FindAll() []domain.EmployeeRole
 	SoftDelete(id uint) (int64, error)
 	HardDelete(id uint) (int64, error)
-	Update(id uint, data *domain.EmployeeRoleCreate) (int64, error)
+	Update(id uint, data *domain.EmployeeRole) (int64, error)
 }

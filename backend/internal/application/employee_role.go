@@ -30,20 +30,20 @@ func (a *EmployeeRoleAppImpl) FindByRole(role string) (*dto.EmployeeRole, error)
 	return &mapRole, nil
 }
 
-func (a *EmployeeRoleAppImpl) Create(data dto.EmployeeRoleCreate) (*dto.EmployeeRole, error) {
-	foundRole, _ := a.FindByRole(data.Role)
+func (a *EmployeeRoleAppImpl) Create(data dto.EmployeeRole) (*dto.EmployeeRole, error) {
+	foundRole, _ := a.FindByRole(data.Name)
 	if foundRole != nil {
 		return nil, ErrAlreadyUse
 	}
 
-	role := domain.EmployeeRole{Role: data.Role}
+	role := domain.EmployeeRole{Name: data.Name}
 
 	newRole, err := a.repo.Create(&role)
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_CREATE", constants.Code.ServerError, err)
 	}
 
-	return &dto.EmployeeRole{ID: newRole.ID, Role: newRole.Role}, nil
+	return &dto.EmployeeRole{ID: newRole.ID, Name: newRole.Name}, nil
 }
 
 func (a *EmployeeRoleAppImpl) Delete(id uint) (map[string]int64, error) {
@@ -61,14 +61,14 @@ func (a *EmployeeRoleAppImpl) Delete(id uint) (map[string]int64, error) {
 	return mapRowAffected, nil
 }
 
-func (a *EmployeeRoleAppImpl) Update(id uint, data dto.EmployeeRoleCreate) (map[string]int64, error) {
+func (a *EmployeeRoleAppImpl) Update(id uint, data dto.EmployeeRole) (map[string]int64, error) {
 	_, err := a.Find(id)
 	mapRowAffected := map[string]int64{"rowAffected": 0}
 	if err != nil {
 		return mapRowAffected, err
 	}
 
-	affected, err := a.repo.Update(id, (*domain.EmployeeRoleCreate)(&data))
+	affected, err := a.repo.Update(id, (*domain.EmployeeRole)(&data))
 	mapRowAffected["rowAffected"] = affected
 	if err != nil {
 		return mapRowAffected, NewAppErr("FAILED_TO_UPDATE", constants.Code.ServerError, err)
@@ -83,7 +83,7 @@ func (a *EmployeeRoleAppImpl) Find(id uint) (*dto.EmployeeRole, error) {
 		return nil, ErrNotFound
 	}
 
-	resData := dto.EmployeeRole{ID: foundRole.ID, Role: foundRole.Role}
+	resData := dto.EmployeeRole{ID: foundRole.ID, Name: foundRole.Name}
 
 	return &resData, nil
 }

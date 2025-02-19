@@ -1,11 +1,11 @@
 package application
 
 import (
-	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 	"thirawoot/in2forest_shop_backend/internal/utils/constants"
+	"thirawoot/in2forest_shop_backend/internal/utils/mapper"
 	"thirawoot/in2forest_shop_backend/pkg"
 )
 
@@ -19,19 +19,16 @@ func NewEmployeeApp(repository portout.EmployeeRepository) portin.EmployeeApp {
 	}
 }
 
-func (s *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
+func (a *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
 	hash, err := pkg.HashPwd(data.Password)
 	if err != nil {
 		return nil, NewAppErr("FAILED_HASH_PASSWORD", constants.Code.ServerError, err)
 	}
 
-	result, err := s.repo.Create(&domain.Employee{
-		Email:          data.Email,
-		Password:       hash,
-		Name:           data.Name,
-		Mobile:         data.Mobile,
-		EmployeeRoleID: data.EmployeeRoleID,
-	})
+	data.Password = hash
+	domainEmp := mapper.DtoToEmployeeDomain(data)
+
+	result, err := a.repo.Create(&domainEmp)
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_CREATE_EMPLOYEE", constants.Code.ServerError, err)
 	}
@@ -44,14 +41,15 @@ func (s *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
 	}, nil
 }
 
-func (s *EmployeeAppImpl) FindByEmail(email string) (*dto.Employee, error) {
-	emp, err := s.repo.FindByEmail(email)
+func (a *EmployeeAppImpl) FindByEmail(email string) (*dto.Employee, error) {
+	emp, err := a.repo.FindByEmail(email)
 
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_FETCH", constants.Code.ServerError, err)
 	} else if emp == nil {
-		return nil, ErrNotFound
+		return nil, ErrUserNotFound
 	}
 
-	return nil, nil
+	dtoEmp := mapper.DaminToEmployeeDto(*emp)
+	return &dtoEmp, nil
 }

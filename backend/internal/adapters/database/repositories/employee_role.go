@@ -19,7 +19,7 @@ func NewEmployeeRoleRepository(db *gorm.DB) portout.EmployeeRoleRepository {
 }
 
 func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRole) (*domain.EmployeeRole, error) {
-	role := domain.EmployeeRole{Role: data.Role}
+	role := domain.EmployeeRole{Name: data.Name}
 
 	result := r.db.Create(&role)
 
@@ -30,9 +30,9 @@ func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRole) (*domain.
 	return &role, nil
 }
 
-func (r *EmployeeRoleRepositoryImpl) FindByRole(role string) *domain.EmployeeRole {
+func (r *EmployeeRoleRepositoryImpl) FindByRole(roleName string) *domain.EmployeeRole {
 	foundRole := domain.EmployeeRole{}
-	result := r.db.First(&foundRole, domain.EmployeeRole{Role: role})
+	result := r.db.First(&foundRole, domain.EmployeeRole{Name: roleName})
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
@@ -77,8 +77,8 @@ func (r *EmployeeRoleRepositoryImpl) HardDelete(id uint) (int64, error) {
 	return result.RowsAffected, nil
 }
 
-func (r *EmployeeRoleRepositoryImpl) Update(id uint, data *domain.EmployeeRoleCreate) (int64, error) {
-	result := r.db.Save(&domain.EmployeeRole{ID: id, Role: data.Role})
+func (r *EmployeeRoleRepositoryImpl) Update(id uint, data *domain.EmployeeRole) (int64, error) {
+	result := r.db.Save(&domain.EmployeeRole{ID: id, Name: data.Name})
 	if result.Error != nil {
 		return result.RowsAffected, result.Error
 	}

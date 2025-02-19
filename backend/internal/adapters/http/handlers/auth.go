@@ -32,3 +32,18 @@ func (h *AuthEmployeeHandler) RegisterAdmin(c *fiber.Ctx) error {
 
 	return c.Status(constants.Code.Created).JSON(ApiResponse(result))
 }
+
+func (h *AuthEmployeeHandler) LoginEmployee(c *fiber.Ctx) error {
+	var input dto.AuthLogin
+	err := c.BodyParser(&input)
+	if err != nil {
+		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
+	}
+
+	result, err := h.app.LoginEmployee(input)
+	if err != nil {
+		return HandleAppErr(err, c)
+	}
+
+	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+}

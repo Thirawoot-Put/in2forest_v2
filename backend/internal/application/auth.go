@@ -27,16 +27,15 @@ func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthRespons
 	if err != nil {
 		return nil, err
 	}
-
-	data.EmployeeRoleID = role.ID
+	data.Role.ID = role.ID
 
 	emp, err := a.empApp.Create(data)
 	if err != nil {
 		return nil, err
 	}
-	exp := time.Now().Add(time.Duration(24 * time.Hour))
 
-	token, err := pkg.SignToken(emp.ID, role.Role, exp)
+	exp := time.Now().Add(time.Duration(24 * time.Hour))
+	token, err := pkg.SignToken(emp.ID, role.Name, exp)
 	if err != nil {
 		return nil, err
 	}
@@ -45,5 +44,20 @@ func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthRespons
 }
 
 func (a *AuthEmployeeAppImpl) LoginEmployee(data dto.AuthLogin) (*dto.AuthResponse, error) {
-	return nil, nil
+	emp, err := a.empApp.FindByEmail(data.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if !pkg.CheckPwd(data.Password, emp.Password) {
+		return nil, ErrPasswordNotMatch
+	}
+
+	exp := time.Now().Add(time.Duration(24 * time.Hour))
+	token, err := pkg.SignToken(emp.ID, "ADMIN", exp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.AuthResponse{AccessToken: token}, nil
 }

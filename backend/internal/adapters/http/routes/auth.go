@@ -31,5 +31,6 @@ func authEmployeeRoutes(route *fiber.Router, db *gorm.DB) {
 	authEmpRoute := r.Group("/employee")
 	{
 		authEmpRoute.Post("/register", authEmpHandler.RegisterAdmin)
+		authEmpRoute.Post("/login", authEmpHandler.LoginEmployee)
 	}
 }

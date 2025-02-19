@@ -28,7 +28,7 @@ func atoiParam(param string) (int, error) {
 }
 
 func (h *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
-	var input dto.EmployeeRoleCreate
+	var input dto.EmployeeRole
 	err := c.BodyParser(&input)
 	if err != nil {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
@@ -62,7 +62,7 @@ func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
 		return fiber.NewError(constants.Code.BadRequest, "FAILED_TO_CONVERT_ID_TO_INT")
 	}
 
-	var input dto.EmployeeRoleCreate
+	var input dto.EmployeeRole
 	err = c.BodyParser(&input)
 	if err != nil {
 		return fiber.NewError(fiber.ErrBadRequest.Code, "FAILED_TO_PARSE_REQUEST_BODY")
