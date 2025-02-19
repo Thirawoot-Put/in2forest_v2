@@ -1,13 +1,15 @@
 package pkg
 
 import (
+	"thirawoot/in2forest_shop_backend/internal/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 func SignToken(sub uint, role string, exp time.Time) (string, error) {
-	var secret = []byte("your-secret-key")
+	env := config.LoadEnv()
+	secret := []byte(env.Secret)
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":  sub,

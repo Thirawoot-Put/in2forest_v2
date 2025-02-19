@@ -11,6 +11,7 @@ type ConfigEnv struct {
 	Port    string
 	Prefix  string
 	Version string
+	Secret  string
 
 	DbPort string
 	DbName string
@@ -29,6 +30,7 @@ func LoadEnv() *ConfigEnv {
 		Port:    os.Getenv("PORT"),
 		Prefix:  os.Getenv("PREFIX"),
 		Version: os.Getenv("VERSION"),
+		Secret:  os.Getenv("SECRET"),
 
 		DbPort: os.Getenv("DB_PORT"),
 		DbHost: os.Getenv("DB_HOST"),
