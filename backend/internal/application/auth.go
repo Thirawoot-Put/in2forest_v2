@@ -3,7 +3,8 @@ package application
 import (
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
-	authjwt "thirawoot/in2forest_shop_backend/internal/utils/auth_jwt"
+	authjwt "thirawoot/in2forest_shop_backend/pkg/jwt_util"
+	"time"
 )
 
 type AuthEmployeeAppImpl struct {
@@ -33,8 +34,9 @@ func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthRespons
 	if err != nil {
 		return nil, err
 	}
+	exp := time.Now().Add(time.Duration(24 * time.Hour))
 
-	token, err := authjwt.SignToken(emp.ID, role.Role)
+	token, err := authjwt.GenerateToken(emp.ID, role.Role, exp)
 	if err != nil {
 		return nil, err
 	}

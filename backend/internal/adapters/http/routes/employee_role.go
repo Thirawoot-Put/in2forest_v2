@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"thirawoot/in2forest_shop_backend/internal/adapters/database/repositories"
 	"thirawoot/in2forest_shop_backend/internal/adapters/http/handlers"
 	"thirawoot/in2forest_shop_backend/internal/application"
-	"thirawoot/in2forest_shop_backend/internal/infras/database/repositories"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"

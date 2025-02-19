@@ -7,9 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func SignToken(sub uint, role string) (string, error) {
-	exp := time.Now().Add(time.Duration(24 * time.Hour))
-	fmt.Println("expired at ----> ", exp)
+func GenerateToken(sub uint, role string, exp time.Time) (string, error) {
 	var secret = []byte("your-secret-key")
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
