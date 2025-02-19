@@ -8,11 +8,11 @@ import (
 
 func ToEmployeeModel(d domain.Employee) model.Employee {
 	return model.Employee{
-		Email:    d.Email,
-		Password: d.Password,
-		Name:     d.Name,
-		Mobile:   d.Mobile,
-		RoleID:   d.Role.ID,
+		Email:          d.Email,
+		Password:       d.Password,
+		Name:           d.Name,
+		Mobile:         d.Mobile,
+		EmployeeRoleID: d.Role.ID,
 	}
 }
 
@@ -24,8 +24,8 @@ func ToEmployeeDomain(m model.Employee) domain.Employee {
 		Name:     m.Name,
 		Mobile:   m.Mobile,
 		Role: domain.EmployeeRole{
-			ID:   m.Role.ID,
-			Name: m.Role.Name,
+			ID:   m.EmployeeRole.ID,
+			Name: m.EmployeeRole.Name,
 		},
 	}
 }

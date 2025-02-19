@@ -10,6 +10,6 @@ type Employee struct {
 	Name     string `gorm:"not null"`
 	Mobile   string `gorm:"not null"`
 
-	RoleID uint
-	Role   EmployeeRole `gorm:"foreignKey:RoleID"`
+	EmployeeRoleID uint         `gorm:"not null"`
+	EmployeeRole   EmployeeRole `gorm:"foreignKey:EmployeeRoleID"`
 }

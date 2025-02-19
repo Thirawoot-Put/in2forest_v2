@@ -36,20 +36,18 @@ func (r *EmployeeRepositoryImpl) Create(data *domain.Employee) (*domain.Employee
 }
 
 func (r *EmployeeRepositoryImpl) FindByEmail(email string) (*domain.Employee, error) {
-	emp := model.Employee{}
+	var emp model.Employee
 
-	result := r.db.Joins("JOIN employee_roles ON employee_roles.id = employees.employee_role_id").First(&emp, "email = ?", email)
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	err := r.db.Preload("EmployeeRole").Where("email = ?", email).First(&emp).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, result.Error
+		return nil, err
 	}
 
-	fmt.Println("---> emp: ", emp)
 	foundEmp := mapper.ToEmployeeDomain(emp)
-	fmt.Println("---> foundEmp: ", foundEmp)
 
 	return &foundEmp, nil
 }

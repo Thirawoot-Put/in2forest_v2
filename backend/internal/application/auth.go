@@ -54,7 +54,7 @@ func (a *AuthEmployeeAppImpl) LoginEmployee(data dto.AuthLogin) (*dto.AuthRespon
 	}
 
 	exp := time.Now().Add(time.Duration(24 * time.Hour))
-	token, err := pkg.SignToken(emp.ID, "ADMIN", exp)
+	token, err := pkg.SignToken(emp.ID, emp.Role.Name, exp)
 	if err != nil {
 		return nil, err
 	}
