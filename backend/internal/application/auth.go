@@ -36,7 +36,7 @@ func (a *AuthEmployeeAppImpl) RegisterAdmin(data dto.Employee) (*dto.AuthRespons
 	}
 	exp := time.Now().Add(time.Duration(24 * time.Hour))
 
-	token, err := pkg.GenerateToken(emp.ID, role.Role, exp)
+	token, err := pkg.SignToken(emp.ID, role.Role, exp)
 	if err != nil {
 		return nil, err
 	}
