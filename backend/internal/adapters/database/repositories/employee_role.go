@@ -3,7 +3,9 @@ package repositories
 import (
 	"errors"
 	"thirawoot/in2forest_shop_backend/internal/domain"
+	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
+	"thirawoot/in2forest_shop_backend/internal/utils/mapper"
 
 	"gorm.io/gorm"
 )
@@ -19,37 +21,39 @@ func NewEmployeeRoleRepository(db *gorm.DB) portout.EmployeeRoleRepository {
 }
 
 func (r *EmployeeRoleRepositoryImpl) Create(data *domain.EmployeeRole) (*domain.EmployeeRole, error) {
-	role := domain.EmployeeRole{Name: data.Name}
+	role := model.EmployeeRole{Name: data.Name}
 
-	result := r.db.Create(&role)
-
-	if result.Error != nil {
-		return nil, result.Error
+	err := r.db.Create(&role).Error
+	if err != nil {
+		return nil, err
 	}
 
-	return &role, nil
+	newRole := mapper.ModelToEmployeeRoleDomain(role)
+	return &newRole, nil
 }
 
 func (r *EmployeeRoleRepositoryImpl) FindByRole(roleName string) *domain.EmployeeRole {
-	foundRole := domain.EmployeeRole{}
-	result := r.db.First(&foundRole, domain.EmployeeRole{Name: roleName})
+	role := model.EmployeeRole{}
+	result := r.db.First(&role, domain.EmployeeRole{Name: roleName})
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
 
+	foundRole := mapper.ModelToEmployeeRoleDomain(role)
 	return &foundRole
 }
 
 func (r *EmployeeRoleRepositoryImpl) Find(id uint) *domain.EmployeeRole {
-	foundRole := domain.EmployeeRole{}
-	result := r.db.First(&foundRole, domain.EmployeeRole{ID: id})
+	role := model.EmployeeRole{}
+	result := r.db.First(&role, domain.EmployeeRole{ID: id})
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
 
-	return &foundRole
+	domainRole := mapper.ModelToEmployeeRoleDomain(role)
+	return &domainRole
 }
 
 func (r *EmployeeRoleRepositoryImpl) FindAll() []domain.EmployeeRole {
@@ -78,7 +82,10 @@ func (r *EmployeeRoleRepositoryImpl) HardDelete(id uint) (int64, error) {
 }
 
 func (r *EmployeeRoleRepositoryImpl) Update(id uint, data *domain.EmployeeRole) (int64, error) {
-	result := r.db.Save(&domain.EmployeeRole{ID: id, Name: data.Name})
+	var role model.EmployeeRole
+
+	updateModel := mapper.DomainToEmployeeRoleModel(*data)
+	result := r.db.Model(&role).Where("id = ?", id).Updates(updateModel)
 	if result.Error != nil {
 		return result.RowsAffected, result.Error
 	}
