@@ -1,4 +1,4 @@
-package authjwt
+package pkg
 
 import (
 	"fmt"

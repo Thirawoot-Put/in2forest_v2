@@ -6,7 +6,7 @@ import (
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
 	"thirawoot/in2forest_shop_backend/internal/utils/constants"
-	"thirawoot/in2forest_shop_backend/pkg/bcrypt"
+	"thirawoot/in2forest_shop_backend/pkg"
 )
 
 type EmployeeAppImpl struct {
@@ -20,7 +20,7 @@ func NewEmployeeApp(repository portout.EmployeeRepository) portin.EmployeeApp {
 }
 
 func (s *EmployeeAppImpl) Create(data dto.Employee) (*dto.Employee, error) {
-	hash, err := bcrypt.HashPwd(data.Password)
+	hash, err := pkg.HashPwd(data.Password)
 	if err != nil {
 		return nil, NewAppErr("FAILED_HASH_PASSWORD", constants.Code.ServerError, err)
 	}
