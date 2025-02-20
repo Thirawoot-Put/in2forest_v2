@@ -66,3 +66,16 @@ func (r *EmployeeRepositoryImpl) Find(id uint) (*domain.Employee, error) {
 	empDoamin := mapper.ToEmployeeDomain(empModel)
 	return &empDoamin, nil
 }
+
+func (r *EmployeeRepositoryImpl) Update(id uint, data *domain.Employee) (*domain.Employee, error) {
+	var emp model.Employee
+	empModel := mapper.ToEmployeeModel(*data)
+
+	err := r.db.Model(&emp).Where("id = ?", id).Updates(empModel).Error
+	if err != nil {
+		return nil, err
+	}
+
+	empDomain := mapper.ToEmployeeDomain(emp)
+	return &empDomain, nil
+}
