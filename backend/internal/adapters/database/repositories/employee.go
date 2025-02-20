@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"errors"
-	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/domain"
 	"thirawoot/in2forest_shop_backend/internal/infras/database/model"
 	portout "thirawoot/in2forest_shop_backend/internal/ports/port_out"
@@ -68,15 +67,13 @@ func (r *EmployeeRepositoryImpl) Find(id uint) (*domain.Employee, error) {
 	return &empDoamin, nil
 }
 
-func (r *EmployeeRepositoryImpl) Update(id uint, data *domain.Employee) (*domain.Employee, error) {
-	var emp model.Employee
+func (r *EmployeeRepositoryImpl) Update(id uint, data *domain.Employee) (int64, error) {
 	empModel := mapper.ToEmployeeModel(*data)
 
-	err := r.db.Model(&emp).Where("id = ?", id).Updates(empModel).Error
-	if err != nil {
-		return nil, err
+	result := r.db.Model(&model.Employee{}).Where("id = ?", id).Updates(empModel)
+	if result.Error != nil {
+		return 0, result.Error
 	}
 
-	empDomain := mapper.ToEmployeeDomain(emp)
-	return &empDomain, nil
+	return result.RowsAffected, nil
 }

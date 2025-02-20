@@ -66,7 +66,7 @@ func (a *EmployeeAppImpl) Find(id uint) (*dto.EmployeeResponse, error) {
 	return &dtoEmp, nil
 }
 
-func (a *EmployeeAppImpl) Update(id uint, data dto.Employee) (*dto.EmployeeResponse, error) {
+func (a *EmployeeAppImpl) Update(id uint, data dto.Employee) (map[string]int64, error) {
 	emp, err := a.repo.Find(id)
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_FETCH", constants.Code.ServerError, err)
@@ -75,11 +75,10 @@ func (a *EmployeeAppImpl) Update(id uint, data dto.Employee) (*dto.EmployeeRespo
 	}
 
 	empDomain := mapper.DtoToEmployeeDomain(data)
-	updated, err := a.repo.Update(id, &empDomain)
+	affected, err := a.repo.Update(id, &empDomain)
 	if err != nil {
 		return nil, NewAppErr("FAILED_TO_UPDATE", constants.Code.ServerError, err)
 	}
 
-	empDto := mapper.DaminToEmployeeResponseDto(*updated)
-	return &empDto, nil
+	return map[string]int64{"affectedRows": affected}, nil
 }
