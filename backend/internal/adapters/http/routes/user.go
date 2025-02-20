@@ -31,6 +31,7 @@ func userEmployeeRoute(route *fiber.Router, db *gorm.DB) {
 
 	userEmpRoute := r.Group("/employee", middlewares.RoleMiddleware(constants.Role.Admin))
 	{
-		userEmpRoute.Get("/profile", handler.GetProfile)
+		userEmpRoute.Get("/profile", handler.GetEmployeeProfile)
+		userEmpRoute.Put("", handler.PutEmployee)
 	}
 }
