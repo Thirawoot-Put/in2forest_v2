@@ -53,3 +53,15 @@ func (a *EmployeeAppImpl) FindByEmail(email string) (*dto.Employee, error) {
 	dtoEmp := mapper.DaminToEmployeeDto(*emp)
 	return &dtoEmp, nil
 }
+
+func (a *EmployeeAppImpl) Find(id uint) (*dto.EmployeeResponse, error) {
+	emp, err := a.repo.Find(id)
+	if err != nil {
+		return nil, NewAppErr("FAILED_TO_FETCH", constants.Code.ServerError, err)
+	} else if emp == nil {
+		return nil, ErrUserNotFound
+	}
+
+	dtoEmp := mapper.DaminToEmployeeResponseDto(*emp)
+	return &dtoEmp, nil
+}

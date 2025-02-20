@@ -57,3 +57,16 @@ func DaminToEmployeeDto(d domain.Employee) dto.Employee {
 		},
 	}
 }
+
+func DaminToEmployeeResponseDto(d domain.Employee) dto.EmployeeResponse {
+	return dto.EmployeeResponse{
+		ID:     d.ID,
+		Email:  d.Email,
+		Name:   d.Name,
+		Mobile: d.Mobile,
+		Role: dto.EmployeeRole{
+			ID:   d.Role.ID,
+			Name: d.Role.Name,
+		},
+	}
+}
