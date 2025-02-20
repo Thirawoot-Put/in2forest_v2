@@ -65,3 +65,21 @@ func (a *EmployeeAppImpl) Find(id uint) (*dto.EmployeeResponse, error) {
 	dtoEmp := mapper.DaminToEmployeeResponseDto(*emp)
 	return &dtoEmp, nil
 }
+
+func (a *EmployeeAppImpl) Update(id uint, data dto.Employee) (*dto.EmployeeResponse, error) {
+	emp, err := a.repo.Find(id)
+	if err != nil {
+		return nil, NewAppErr("FAILED_TO_FETCH", constants.Code.ServerError, err)
+	} else if emp == nil {
+		return nil, ErrUserNotFound
+	}
+
+	empDomain := mapper.DtoToEmployeeDomain(data)
+	updated, err := a.repo.Update(id, &empDomain)
+	if err != nil {
+		return nil, NewAppErr("FAILED_TO_UPDATE", constants.Code.ServerError, err)
+	}
+
+	empDto := mapper.DaminToEmployeeResponseDto(*updated)
+	return &empDto, nil
+}
