@@ -50,3 +50,19 @@ func (r *EmployeeRepositoryImpl) FindByEmail(email string) (*domain.Employee, er
 
 	return &foundEmp, nil
 }
+
+func (r *EmployeeRepositoryImpl) Find(id uint) (*domain.Employee, error) {
+	var empModel model.Employee
+
+	err := r.db.Preload("EmployeeRole").Where("id = ?", id).First(&empModel).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	empDoamin := mapper.ToEmployeeDomain(empModel)
+	return &empDoamin, nil
+}
