@@ -19,6 +19,9 @@ func NewEmployeeHandler(app portin.EmployeeApp) *EmployeeHandler {
 func (h *EmployeeHandler) GetProfile(c *fiber.Ctx) error {
 	user := c.Locals("user")
 	id := pkg.GetSubInToken(user)
+	if id == 0 {
+		c.Status(constants.Code.Forbidden).JSON(ApiResponse("error", "JWT_MALFORMED"))
+	}
 
 	result, err := h.app.Find(uint(id))
 	if err != nil {

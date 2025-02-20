@@ -30,7 +30,10 @@ func SignToken(sub uint, role string, exp time.Time) (string, error) {
 func GetSubInToken(token interface{}) uint {
 	jwtToken := token.(*jwt.Token)
 	cliams := jwtToken.Claims.(jwt.MapClaims)
-	id := cliams["sub"].(float64)
+	id, ok := cliams["sub"].(float64)
+	if !ok {
+		return 0
+	}
 
 	return uint(id)
 }
