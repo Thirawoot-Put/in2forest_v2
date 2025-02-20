@@ -7,9 +7,5 @@ import "github.com/gofiber/fiber/v2"
 // }
 
 func ApiResponse(message string, data interface{}) fiber.Map {
-	if message == "" {
-		message = "success"
-	}
-
 	return fiber.Map{"message": message, "data": data}
 }

@@ -6,6 +6,7 @@ import (
 	"thirawoot/in2forest_shop_backend/internal/adapters/http/middlewares"
 	"thirawoot/in2forest_shop_backend/internal/application"
 	"thirawoot/in2forest_shop_backend/internal/config"
+	"thirawoot/in2forest_shop_backend/internal/utils/constants"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -28,7 +29,7 @@ func userEmployeeRoute(route *fiber.Router, db *gorm.DB) {
 	app := application.NewEmployeeApp(repo)
 	handler := handlers.NewEmployeeHandler(app)
 
-	userEmpRoute := r.Group("/employee")
+	userEmpRoute := r.Group("/employee", middlewares.RoleMiddleware(constants.Role.Admin))
 	{
 		userEmpRoute.Get("/profile", handler.GetProfile)
 	}

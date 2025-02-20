@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
+	"thirawoot/in2forest_shop_backend/internal/utils/constants"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -18,8 +18,13 @@ func NewEmployeeHandler(app portin.EmployeeApp) *EmployeeHandler {
 
 func (h *EmployeeHandler) GetProfile(c *fiber.Ctx) error {
 	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
+	cliams := user.Claims.(jwt.MapClaims)
+	id := cliams["sub"].(float64)
 
-	fmt.Println("local ---> ", claims)
-	return c.SendString("profile")
+	result, err := h.app.Find(uint(id))
+	if err != nil {
+		return appErrHandler(err, c)
+	}
+
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }
