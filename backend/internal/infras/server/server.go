@@ -3,13 +3,13 @@ package server
 import (
 	"fmt"
 	fiberlog "github.com/gofiber/fiber/v2/middleware/logger"
-	"thirawoot/in2forest_shop_backend/internal/adapters/http/handlers"
 	"thirawoot/in2forest_shop_backend/internal/adapters/http/routes"
 	"thirawoot/in2forest_shop_backend/internal/config"
 	"thirawoot/in2forest_shop_backend/internal/infras/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"gorm.io/gorm"
 )
 
@@ -30,11 +30,12 @@ func (s *Server) routes(prefix string, version string, db *gorm.DB) {
 
 	mainGroup := s.app.Group(url)
 
-	mainGroup.Get("/health", handlers.HealthCheck)
+	mainGroup.Use(healthcheck.New())
 
 	// place other route
 	routes.EmployeeRoleRoutes(&mainGroup, db)
 	routes.AuthRoutes(&mainGroup, db)
+	routes.UserRoutes(&mainGroup, db)
 }
 
 func (s *Server) Start() {
