@@ -26,3 +26,11 @@ func SignToken(sub uint, role string, exp time.Time) (string, error) {
 
 	return claims.SignedString(secret)
 }
+
+func GetSubInToken(token interface{}) uint {
+	jwtToken := token.(*jwt.Token)
+	cliams := jwtToken.Claims.(jwt.MapClaims)
+	id := cliams["sub"].(float64)
+
+	return uint(id)
+}
