@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/config"
 	"time"
 
@@ -8,6 +9,10 @@ import (
 )
 
 func SignToken(sub uint, role string, exp time.Time) (string, error) {
+	fmt.Println("exp --> ", exp)
+	fmt.Println("exp in unix --> ", exp.Unix())
+	fmt.Println("now in unix --> ", time.Now().Unix())
+
 	env := config.LoadEnv()
 	secret := []byte(env.Secret)
 

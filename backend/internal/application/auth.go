@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"thirawoot/in2forest_shop_backend/internal/dto"
 	portin "thirawoot/in2forest_shop_backend/internal/ports/port_in"
 	"thirawoot/in2forest_shop_backend/pkg"
@@ -53,7 +54,9 @@ func (a *AuthEmployeeAppImpl) LoginEmployee(data dto.AuthLogin) (*dto.AuthRespon
 		return nil, ErrPasswordNotMatch
 	}
 
-	exp := time.Now().Add(time.Duration(24 * time.Hour))
+	exp := time.Now().Add(time.Hour)
+	fmt.Println("before pass exp --> ", exp)
+	fmt.Println("before pass exp in unix --> ", exp.Unix())
 	token, err := pkg.SignToken(emp.ID, emp.Role.Name, exp)
 	if err != nil {
 		return nil, err
