@@ -21,13 +21,9 @@ func atoiParam(param string) (int, error) {
 func appErrHandler(e error, c *fiber.Ctx) error {
 	if appErr, ok := e.(*application.AppErr); ok {
 		log.Printf("Error in %s %s: %s \n", c.Method(), c.Path(), appErr.Error())
-		return c.Status(appErr.Code).JSON(fiber.Map{
-			"message": appErr.Message,
-		})
+		return c.Status(appErr.Code).JSON(ApiResponse(appErr.Error(), nil))
 	}
 
 	log.Printf("Error in %s %s: %v \n", c.Method(), c.Path(), e)
-	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-		"message": "Unexpected error",
-	})
+	return c.Status(fiber.StatusInternalServerError).JSON(ApiResponse("Unexpected error", nil))
 }

@@ -28,7 +28,7 @@ func (h *EmployeeRoleHandler) PostEmployeeRole(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Created).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Created).JSON(ApiResponse("success", result))
 }
 
 func (h *EmployeeRoleHandler) DeleteEmployeeRole(c *fiber.Ctx) error {
@@ -42,7 +42,7 @@ func (h *EmployeeRoleHandler) DeleteEmployeeRole(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }
 
 func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
@@ -62,7 +62,7 @@ func (h *EmployeeRoleHandler) PutEmployeeRole(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }
 
 func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
@@ -76,7 +76,7 @@ func (h *EmployeeRoleHandler) GetEmployeeRole(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }
 
 func (h *EmployeeRoleHandler) GetEmployeeRoles(c *fiber.Ctx) error {
@@ -85,5 +85,5 @@ func (h *EmployeeRoleHandler) GetEmployeeRoles(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }

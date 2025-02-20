@@ -26,10 +26,10 @@ func userEmployeeRoute(route *fiber.Router, db *gorm.DB) {
 
 	repo := repositories.NewEmployeeRepository(db)
 	app := application.NewEmployeeApp(repo)
-	hander := handlers.NewEmployeeHandler(app)
+	handler := handlers.NewEmployeeHandler(app)
 
 	userEmpRoute := r.Group("/employee")
 	{
-		userEmpRoute.Get("/profile", hander.GetProfile)
+		userEmpRoute.Get("/profile", handler.GetProfile)
 	}
 }

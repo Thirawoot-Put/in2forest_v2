@@ -30,7 +30,7 @@ func (h *AuthEmployeeHandler) RegisterAdmin(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Created).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Created).JSON(ApiResponse("success", result))
 }
 
 func (h *AuthEmployeeHandler) LoginEmployee(c *fiber.Ctx) error {
@@ -45,5 +45,5 @@ func (h *AuthEmployeeHandler) LoginEmployee(c *fiber.Ctx) error {
 		return appErrHandler(err, c)
 	}
 
-	return c.Status(constants.Code.Ok).JSON(ApiResponse(result))
+	return c.Status(constants.Code.Ok).JSON(ApiResponse("success", result))
 }
