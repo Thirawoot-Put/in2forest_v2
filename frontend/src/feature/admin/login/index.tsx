@@ -1,7 +1,10 @@
-import FormLoginAdmin from "./components/form";
+import FormLoginAdmin from "./components/FormLoginAdmin";
 
 export default function FeatureAdminLogin() {
   return (
-    <FormLoginAdmin />
+    <div className="flex flex-col gap-4 w-10/12 border border-gray-500 rounded-lg py-6">
+      <p className="font-semibold text-xl text-center">Admin Login</p>
+      <FormLoginAdmin />
+    </div>
   )
 }
