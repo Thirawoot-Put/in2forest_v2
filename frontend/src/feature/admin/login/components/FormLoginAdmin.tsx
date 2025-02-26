@@ -14,7 +14,7 @@ export default function FormLoginAdmin() {
 
   const onClickLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(input)
+    console.log(process.env.NEXT_PUBLIC_API_URL)
   }
 
   const onClickRegister = () => {
@@ -29,8 +29,20 @@ export default function FormLoginAdmin() {
   return (
     <form className="w-full h-full py-4" onSubmit={onClickLogin}>
       <div className="flex flex-col gap-2 items-center ">
-        <InputLogin name="username" label="Username" size="small" placeholder="sample@mail.com" type="" onChange={handleChangeInput} />
-        <InputLogin name="password" label="Password" size="small" placeholder="password1234" type="password" onChange={handleChangeInput} />
+        <InputLogin
+          name="username"
+          label="Username"
+          size="small"
+          placeholder="sample@mail.com"
+          type=""
+          onChange={handleChangeInput} />
+        <InputLogin
+          name="password"
+          label="Password"
+          size="small"
+          placeholder="password1234"
+          type="password"
+          onChange={handleChangeInput} />
       </div>
       <div className="flex flex-col items-center justify-center gap-2 pt-5">
         <Button type="submit" variant="contained">Login</Button>
